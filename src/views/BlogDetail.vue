@@ -11,11 +11,13 @@
        <div class="right"><a  @click.prevent="dele">删除</a></div>
       </el-link>
      
-      <el-divider></el-divider>
-      
+      <el-divider>  </el-divider>
       <div class="markdown-body" v-html="blog.content">
       </div>
-
+     <div class="footer">
+      <span>{{ blog.created | mydata }}</span>
+        <span>浏览量：{{blog.frequency}}</span> 
+     </div>
     </div>
 
   </div>
@@ -31,9 +33,9 @@
     data() {
       return {
         blog: {
-          id: "",
-          title: "",
-          content: ""
+          // id: "",
+          // title: "",
+          // content: ""
         },
         ownBlog: false
       }
@@ -79,26 +81,38 @@
           console.log(err)
         })
         }
-      }
+      },
+      frequency(blogId){
+      this.$axios.post('/blogs/'+blogId).then(res=>{
+
+      })
+    },
+   
     },
     created() {
       const blogId = this.$route.params.blogId
       // console.log(blogId)
-      const _this = this
+      // const _this = this
       this.$axios.get('/blog/' + blogId).then(res => {
-        const blog = res.data.data
-        _this.blog.id = blog.id
-        _this.blog.title = blog.title
+        this.blog = res.data.data
+        // _this.blog.id = blog.id
+        // _this.blog.title = blog.title
 
         var MardownIt = require("markdown-it")
         var md = new MardownIt()
 
-        var result = md.render(blog.content)
-        _this.blog.content = result
-        _this.ownBlog = (blog.userId === _this.$store.getters.getUser.id)
-
+        var result = md.render(this.blog.content)
+        this.blog.content = result
+        this.ownBlog = (this.blog.userId === this.$store.getters.getUser.id)
       })
-    }
+      this.frequency(blogId)
+    },
+    filters: {
+    mydata(value) {
+      // console.log(value)
+      return value.replace("T", " ");
+    },
+  },
   }
 </script>
 
@@ -123,5 +137,15 @@
     min-height: 700px;
     padding: 20px 15px;
   }
-
+.footer{
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin-right: 50px;
+  margin-top: 10px;
+  }
+  .footer span{
+    
+    margin-top: 5px;
+  }
 </style>

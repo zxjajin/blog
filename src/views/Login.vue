@@ -68,7 +68,7 @@ export default {
            }).then(res => {  //res是返回结果
                //你的下一步操作 例:
               //  console.log(this)
-              //  console.log(res.data)
+               console.log(res.data)
               const jwt = res.headers['authorization']
               const userInfo = res.data.data
               // console.log("jwt",jwt)
@@ -129,7 +129,7 @@ span{
 }
 .el-tabs{
   height: 356px;
-  background: url('../../public/static/img/c.jpg');
+  background: url('../../public/static/img/a.jpg');
   background-size: contain;
 }
 .el-tab-pane{

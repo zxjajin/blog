@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Blogs from '../views/Blogs.vue'
 import BlogEdit from '../views/BlogEdit.vue'
 import BlogDetail from '../views/BlogDetail.vue'
+import User from '@/views/UserEdit.vue'
 
 Vue.use(VueRouter)
 
@@ -43,6 +44,11 @@ const routes = [
     meta: {
       requireAuth: true
     }
+  },
+  {
+    path:'/user',
+    name:'User',
+    component:User
   }
 ]
 

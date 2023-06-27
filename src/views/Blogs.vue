@@ -3,11 +3,14 @@
     <div class="aside">
       <!-- <Header></Header> -->
       <ul class="ul">
-        <li>高数</li>
+        <!-- <li>高数</li>
         <li>JAVA</li>
         <li>C语言</li>
         <li>Vue</li>
-        <li>日记</li>
+        <li>日记</li> -->
+        <li v-for="item in classify" :key="item.id" >
+        {{item.title}}
+        </li>
       </ul>
     </div>
     <div class="content">
@@ -39,7 +42,7 @@
 
       <div class="block">
         <el-timeline>
-          <el-timeline-item :timestamp="blog.created | mydata" placement="top" v-for="blog in blogs">
+          <el-timeline-item :timestamp="blog.created | mydata" placement="top" v-for="blog in blogs" :key="blog.id">
             <el-card>
               <h4>
                 <router-link :to="{ name: 'BlogDetail', params: { blogId: blog.id } }">
@@ -47,7 +50,9 @@
                 </router-link>
               </h4>
               <p>{{ blog.description }}</p>
+              <p>浏览量：{{ blog.frequency }}</p>
             </el-card>
+            
           </el-timeline-item>
         </el-timeline>
 
@@ -74,18 +79,31 @@ export default {
       currentPage: 1,
       total: 0,
       pageSize: 5,
+      classify:[]
     };
   },
   methods: {
     page(currentPage) {
-      const _this = this;
-      _this.$axios.get("/blogs?currentPage=" + currentPage).then((res) => {
-        // console.log(res)
-        _this.blogs = res.data.data.records;
-        _this.currentPage = res.data.data.current;
-        _this.total = res.data.data.total;
-        _this.pageSize = res.data.data.size;
-      });
+      // const _this = this;
+      // _this.$axios.get("/blogs?currentPage=" + currentPage).then((res) => {
+      //   // console.log(res)
+      //   _this.blogs = res.data.data.records;
+      //   _this.currentPage = res.data.data.current;
+      //   _this.total = res.data.data.total;
+      //   _this.pageSize = res.data.data.size;
+      // });
+      this.$axios({
+        url:'/blogs',
+        params:{
+          currentPage
+        }
+      }).then(res=>{
+        console.log(res)
+        this.blogs = res.data.data.records;
+        this.currentPage = res.data.data.current;
+        this.total = res.data.data.total;
+        this.pageSize = res.data.data.size;
+      })
     },
     search() {
       this.$axios({
@@ -102,9 +120,18 @@ export default {
         this.pageSize = res.data.data.size;
       });
     },
+    getTitle(){
+      this.$axios("/classify").then(res=>{
+        this.classify = res.data.data
+        console.log("分类",this.classify)
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
   },
   created() {
     this.page(1);
+    this.getTitle()
   },
   filters: {
     mydata(value) {

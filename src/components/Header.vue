@@ -12,8 +12,8 @@
         </svg>
       </a>
     </div>
-    <div class="block">
-      <el-avatar :size="50" :src="user.avatar"></el-avatar>
+    <div @click="getUser" class="block">
+      <el-avatar  :size="50" :src="user.avatar"></el-avatar>
       <!-- <img src="../assets/l" alt=""> -->
       <div>{{ user.username }}</div>
     </div>
@@ -40,6 +40,7 @@ export default {
       flag: false,
       input: "",
       user: {
+        id:'',
         username: "请先登录",
         avatar:
           "http://8.138.58.49:9999/a.png",
@@ -61,12 +62,19 @@ export default {
           _this.$router.push("/login");
         });
     },
+    getUser(){
+      if(this.user.username!=="请先登录" && this.user.id!==''){
+        this.$router.push("/user?id="+this.user.id)
+      }else{ this.$message.warning("您还没有登录呢")}
+    }
   },
   created() {
     // console.log("获取UserInfo", this.$store.getters.getUser);
     if (this.$store.getters.getUser) {
       this.user.username = this.$store.getters.getUser.username;
       this.user.avatar = this.$store.getters.getUser.avatar;
+      this.user.id = this.$store.getters.getUser.id
+      console.log("id",this.user.id)
       console.log("头像", this.user.avatar);
 
       this.hasLogin = true;
@@ -87,7 +95,7 @@ export default {
 
 .right {
   position: absolute;
-  top: 98px;
+  top: 100px;
   right: 290px;
 }
 
