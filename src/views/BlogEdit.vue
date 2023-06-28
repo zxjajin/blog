@@ -12,6 +12,17 @@
         <el-form-item label="摘要" prop="description">
           <el-input type="textarea" v-model="ruleForm.description"></el-input>
         </el-form-item>
+        <el-form-item label="分类" prop="classifyId">
+          <el-select v-model="ruleForm.classifyId" placeholder="请选择">
+          <el-option
+            v-for="item in classify"
+            :key="item.id"
+            :label="item.title"
+            :value="item.id">
+          </el-option>
+        </el-select>
+        </el-form-item>
+       
 
         <el-form-item label="内容" prop="content">
           <mavon-editor v-model="ruleForm.content"></mavon-editor>
@@ -41,7 +52,8 @@
           id: '',
           title: '',
           description: '',
-          content: ''
+          content: '',
+          classifyId:''
         },
         rules: {
           title: [
@@ -53,15 +65,19 @@
           ],
           content: [
             { trequired: true, message: '请输入内容', trigger: 'blur' }
+          ],
+          classifyId:[
+          { required: true, message: '请选择分类', trigger: 'blur' }
           ]
-        }
+        },
+        classify:[]
       };
     },
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid && this.$store.getters.getUser) {
-
+            console.log(this.ruleForm)
             const _this = this
             this.$axios.post('/blog/edit', this.ruleForm, {
               headers: {
@@ -93,7 +109,15 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      }
+      },
+      getTitle(){
+      this.$axios("/classify").then(res=>{
+        this.classify = res.data.data
+        console.log("分类",this.classify)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     },
     created() {
       const blogId = this.$route.params.blogId
@@ -106,8 +130,10 @@
           _this.ruleForm.title = blog.title
           _this.ruleForm.description = blog.description
           _this.ruleForm.content = blog.content
+          _this.ruleForm.classifyId = blog.classifyId
         })
       }
+      this.getTitle()
 
     }
   }
@@ -115,8 +141,16 @@
 
 <style scoped>
   .m-content {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     text-align: center;
+  }
+  .el-select{
+    width: 100%;
+  }
+  ::v-deep .block .header{
+    position: relative;
+    width: 342px;
+    left: 440px;
   }
 </style>

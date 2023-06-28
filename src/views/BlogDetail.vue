@@ -43,9 +43,12 @@
     methods:{
       dele(){
         console.log(this.blog.id)
-        const flag = confirm("是否确认删除？")
-        console.log(flag)
-        if(flag){
+
+        this.$confirm('是否确认删除？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
           const _this = this
           this.$axios({
             method:"DELETE",
@@ -80,7 +83,15 @@
               });
           console.log(err)
         })
-        }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+
+
+       
       },
       frequency(blogId){
       this.$axios.post('/blogs/'+blogId).then(res=>{

@@ -1,7 +1,7 @@
 <template>
   <div class="m-content">
     <!-- <h3>欢迎来到阿金的博客</h3> -->
-    <div class="right">
+    <!-- <div class="right">
       <a class="Header-link" href="https://github.com/zxjajin" data-hotkey="g d" aria-label="Homepage " data-turbo="false"
         data-analytics-event='{"category":"Header","action":"go to dashboard","label":"icon:logo"}'>
         <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true"
@@ -11,11 +11,14 @@
           </path>
         </svg>
       </a>
-    </div>
-    <div @click="getUser" class="block">
-      <el-avatar  :size="50" :src="user.avatar"></el-avatar>
+    </div> -->
+    <div  class="block">
+      <div class="header" @click="getUser">
+        <el-avatar  :size="50" :src="user.avatar"></el-avatar>
       <!-- <img src="../assets/l" alt=""> -->
-      <div>{{ user.username }}</div>
+      <span class="name">{{ user.username }}</span>
+      </div>
+     
     </div>
 
     <div class="maction">
@@ -88,7 +91,17 @@ export default {
   position: relative;
   padding-top: 20px;
 }
-
+.name{
+  display: block;
+}
+.block{
+  position: relative;
+}
+.block .header{
+  position: relative;
+  width: 100px;
+  left: 440px;
+}
 .maction span {
   margin: 0 10px;
 }

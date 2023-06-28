@@ -129,7 +129,7 @@ span{
 }
 .el-tabs{
   height: 356px;
-  background: url('../../public/static/img/a.jpg');
+  background: url('../../public/static/img/d.jpg');
   background-size: contain;
 }
 .el-tab-pane{
